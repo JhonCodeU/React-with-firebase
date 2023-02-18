@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import Form from './components/Form'
+import ContactList from './components/ContactList'
 
 const App = () => {
   return (
     <Container>
       <Title>Lista de Contactos</Title>
       <Form />
+      <ContactList />
     </Container>
   );
 }
