@@ -1,13 +1,34 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import db from '../firebase/firebaseConfig'
+import { collection, addDoc } from "firebase/firestore";
 
 const Form = () => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
+  const onSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!name || !email) {
+      alert('Por favor ingrese un nombre y un email');
+      return;
+    }
+
+    try {
+      const docRef = await addDoc(collection(db, "users"), { name, email });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
+    setName('');
+    setEmail('');
+  }
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <Input
         type="text"
         value={name}
