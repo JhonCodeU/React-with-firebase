@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import db from '../firebase/firebaseConfig'
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, deleteDoc } from "firebase/firestore";
 
 const Contact = ({ contact }) => {
 
@@ -18,10 +18,18 @@ const Contact = ({ contact }) => {
     }
 
     try {
-      const docRef = await updateDoc(doc(db, "users", contact.id), { name, email });
-      console.log("Document updated with ID: ", docRef.id);
+      await updateDoc(doc(db, "users", contact.id), { name, email });
+      setEditingContact(false);
     } catch (e) {
       console.error("Error updating document: ", e);
+    }
+  }
+
+  const deleteContact = async ({ id }) => {
+    try {
+      await deleteDoc(doc(db, "users", id));
+    } catch (e) {
+      console.error("Error deleting document: ", e);
     }
   }
 
@@ -49,7 +57,7 @@ const Contact = ({ contact }) => {
           <Nombre>{contact.name}</Nombre>
           <Correo>{contact.email}</Correo>
           <Boton onClick={() => setEditingContact(true)}>Editar</Boton>
-          <Boton>Eliminar</Boton>
+          <Boton onClick={() => deleteContact(contact)}>Eliminar</Boton>
         </>
       }
     </ContenedorContacto>
